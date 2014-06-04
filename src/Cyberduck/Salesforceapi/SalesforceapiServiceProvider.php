@@ -27,8 +27,17 @@ class SalesforceapiServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function register()
-	{
-		//
+	{		
+
+			$this->app['salesforceapi'] = $this->app->share(function($app) {
+				return new Salesforceapi($app['config']);
+			});
+
+			$this->app->booting(function()
+			{
+			  	$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+			  	$loader->alias('Salesforceapi', 'Cyberduck\Salesforceapi\Facades\Salesforceapi');
+			});
 	}
 
 	/**
@@ -38,7 +47,7 @@ class SalesforceapiServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('salesforceapi');
 	}
 
 }
